@@ -200,7 +200,7 @@ dotnet run --project SDCafe.API
 
 ## 🌐 API Endpoints
 ```bash
-### 📋 Siparişler
+📋 Siparişler
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/orders` | Tüm siparişleri listele |
 | `GET` | `/api/orders/{id}` | Sipariş detaylarını getir |
@@ -208,7 +208,7 @@ dotnet run --project SDCafe.API
 | `PUT` | `/api/orders/{id}` | Sipariş güncelle |
 | `DELETE` | `/api/orders/{id}` | Sipariş sil |
 
-### 📦 Ürünler
+📦 Ürünler
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/products` | Tüm ürünleri listele |
 | `GET` | `/api/products/{id}` | Ürün detaylarını getir |
@@ -217,13 +217,13 @@ dotnet run --project SDCafe.API
 | `PUT` | `/api/products/{id}` | Ürün güncelle |
 | `DELETE` | `/api/products/{id}` | Ürün sil |
 
-### 💳 Ödemeler
+💳 Ödemeler
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/payments` | Tüm ödemeleri listele |
 | `GET` | `/api/payments/{id}` | Ödeme detaylarını getir |
 | `POST` | `/api/payments` | Yeni ödeme oluştur |
 
-### 👥 Kullanıcılar
+👥 Kullanıcılar
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/users` | Tüm kullanıcıları listele |
 | `GET` | `/api/users/{id}` | Kullanıcı detaylarını getir |

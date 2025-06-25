@@ -1,0 +1,169 @@
+@model IEnumerable<SDCafe.Entities.Order>
+
+@{
+    ViewData["Title"] = "Mutfak Paneli";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Mutfak Paneli</h1>
+    <div>
+        <span class="badge bg-warning me-2">Bekleyen: @Model.Count(o => o.Status == SDCafe.Entities.OrderStatus.Pending)</span>
+        <span class="badge bg-info">Hazırlanan: @Model.Count(o => o.Status == SDCafe.Entities.OrderStatus.Preparing)</span>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    @foreach (var order in Model.OrderBy(o => o.CreatedDate))
+    {
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 @GetStatusCardClass(order.Status)">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">@order.OrderNumber</h6>
+                    <div>
+                        <span class="badge @GetStatusBadgeClass(order.Status)">
+                            @GetStatusText(order.Status)
+                        </span>
+                        <small class="text-muted ms-2">@order.CreatedDate.ToString("HH:mm")</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p><strong>Masa:</strong> @order.Table?.TableNumber</p>
+                            <p><strong>Garson:</strong> @(order.Waiter?.FirstName + " " + order.Waiter?.LastName)</p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Toplam:</strong> @order.TotalAmount.ToString("C")</p>
+                            <p><strong>Ürün Sayısı:</strong> @order.OrderItems?.Count</p>
+                        </div>
+                    </div>
+                    
+                    @if (order.OrderItems != null && order.OrderItems.Any())
+                    {
+                        <div class="mb-3">
+                            <h6>Sipariş Detayları:</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Ürün</th>
+                                            <th class="text-center">Miktar</th>
+                                            <th class="text-end">Toplam</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in order.OrderItems)
+                                        {
+                                            <tr>
+                                                <td>@item.Product?.Name</td>
+                                                <td class="text-center">@item.Quantity</td>
+                                                <td class="text-end">@item.TotalPrice.ToString("C")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(order.Notes))
+                    {
+                        <div class="alert alert-warning py-2">
+                            <small><strong>Not:</strong> @order.Notes</small>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group w-100" role="group">
+                        <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> Detay
+                        </a>
+                        
+                        @if (order.Status == SDCafe.Entities.OrderStatus.Pending)
+                        {
+                            <form asp-action="AcceptOrder" method="post" style="display: inline;">
+                                <input type="hidden" name="orderId" value="@order.Id" />
+                                <button type="submit" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-check"></i> Kabul Et
+                                </button>
+                            </form>
+                        }
+                        
+                        @if (order.Status == SDCafe.Entities.OrderStatus.Preparing)
+                        {
+                            <form asp-action="CompleteOrder" method="post" style="display: inline;">
+                                <input type="hidden" name="orderId" value="@order.Id" />
+                                <button type="submit" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-check-double"></i> Hazır
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="fas fa-utensils fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">Bekleyen sipariş yok</h4>
+        <p class="text-muted">Mutfakta hazırlanacak sipariş bulunmuyor.</p>
+    </div>
+}
+
+@functions {
+    private string GetStatusBadgeClass(SDCafe.Entities.OrderStatus status)
+    {
+        return status switch
+        {
+            SDCafe.Entities.OrderStatus.Pending => "bg-warning text-dark",
+            SDCafe.Entities.OrderStatus.Preparing => "bg-info",
+            SDCafe.Entities.OrderStatus.Ready => "bg-primary",
+            SDCafe.Entities.OrderStatus.Completed => "bg-secondary",
+            SDCafe.Entities.OrderStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetStatusCardClass(SDCafe.Entities.OrderStatus status)
+    {
+        return status switch
+        {
+            SDCafe.Entities.OrderStatus.Pending => "border-warning",
+            SDCafe.Entities.OrderStatus.Preparing => "border-info",
+            _ => ""
+        };
+    }
+
+    private string GetStatusText(SDCafe.Entities.OrderStatus status)
+    {
+        return status switch
+        {
+            SDCafe.Entities.OrderStatus.Pending => "Bekliyor",
+            SDCafe.Entities.OrderStatus.Preparing => "Hazırlanıyor",
+            SDCafe.Entities.OrderStatus.Ready => "Hazır",
+            SDCafe.Entities.OrderStatus.Completed => "Tamamlandı",
+            SDCafe.Entities.OrderStatus.Cancelled => "İptal Edildi",
+            _ => "Bilinmiyor"
+        };
+    }
+} 

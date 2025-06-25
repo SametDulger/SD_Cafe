@@ -1,0 +1,132 @@
+@model SDCafe.Entities.Order
+
+@{
+    ViewData["Title"] = "Sipariş Düzenle";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Sipariş Durumu Güncelle</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Geri Dön
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Model.OrderNumber</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Masa:</strong> @Model.Table?.TableNumber</p>
+                        <p><strong>Garson:</strong> @(Model.Waiter?.FirstName + " " + Model.Waiter?.LastName)</p>
+                        <p><strong>Toplam Tutar:</strong> @Model.TotalAmount.ToString("C")</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mevcut Durum:</strong> 
+                            <span class="badge @GetStatusBadgeClass(Model.Status)">
+                                @GetStatusText(Model.Status)
+                            </span>
+                        </p>
+                        <p><strong>Oluşturulma:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+                    </div>
+                </div>
+
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Yeni Durum</label>
+                        <select name="status" class="form-select">
+                            <option value="1">Bekliyor</option>
+                            <option value="2">Hazırlanıyor</option>
+                            <option value="3">Hazır</option>
+                            <option value="4">Tamamlandı</option>
+                            <option value="5">İptal Edildi</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Güncelle
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Durum Açıklamaları</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <span class="badge bg-warning">Bekliyor</span>
+                        <small class="text-muted">Sipariş alındı, hazırlanmaya başlanmadı</small>
+                    </li>
+                    <li class="mb-2">
+                        <span class="badge bg-info">Hazırlanıyor</span>
+                        <small class="text-muted">Sipariş hazırlanmaya başlandı</small>
+                    </li>
+                    <li class="mb-2">
+                        <span class="badge bg-primary">Hazır</span>
+                        <small class="text-muted">Sipariş hazır, teslim edilmeyi bekliyor</small>
+                    </li>
+                    <li class="mb-2">
+                        <span class="badge bg-secondary">Tamamlandı</span>
+                        <small class="text-muted">Sipariş tamamen tamamlandı</small>
+                    </li>
+                    <li class="mb-2">
+                        <span class="badge bg-danger">İptal Edildi</span>
+                        <small class="text-muted">Sipariş iptal edildi</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Mevcut durumu selected yap
+            var currentStatus = @((int)Model.Status);
+            $('select[name="status"] option[value="' + currentStatus + '"]').prop('selected', true);
+        });
+    </script>
+}
+
+@functions {
+    private string GetStatusBadgeClass(SDCafe.Entities.OrderStatus status)
+    {
+        return status switch
+        {
+            SDCafe.Entities.OrderStatus.Pending => "bg-warning",
+            SDCafe.Entities.OrderStatus.Preparing => "bg-info",
+            SDCafe.Entities.OrderStatus.Ready => "bg-primary",
+            SDCafe.Entities.OrderStatus.Completed => "bg-secondary",
+            SDCafe.Entities.OrderStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetStatusText(SDCafe.Entities.OrderStatus status)
+    {
+        return status switch
+        {
+            SDCafe.Entities.OrderStatus.Pending => "Bekliyor",
+            SDCafe.Entities.OrderStatus.Preparing => "Hazırlanıyor",
+            SDCafe.Entities.OrderStatus.Ready => "Hazır",
+            SDCafe.Entities.OrderStatus.Completed => "Tamamlandı",
+            SDCafe.Entities.OrderStatus.Cancelled => "İptal Edildi",
+            _ => "Bilinmiyor"
+        };
+    }
+} 

@@ -1,0 +1,58 @@
+@model SDCafe.Entities.Table
+
+@{
+    ViewData["Title"] = "Masa Sil";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Masa Sil</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Geri Dön
+    </a>
+</div>
+
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">Dikkat!</h4>
+    <p>Bu masayı silmek istediğinizden emin misiniz?</p>
+    <hr>
+    <p class="mb-0">Masa silinmeyecek, sadece arşivlenecektir. Bu işlem geri alınabilir.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Masa @Model.TableNumber</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Masa Numarası:</strong> @Model.TableNumber</p>
+                <p><strong>Kapasite:</strong> @Model.Capacity kişi</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Oluşturulma Tarihi:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+                @if (Model.UpdatedDate.HasValue)
+                {
+                    <p><strong>Son Güncelleme:</strong> @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</p>
+                }
+                <p><strong>Durum:</strong> 
+                    <span class="badge @(Model.IsOccupied ? "bg-danger" : "bg-success")">
+                        @(Model.IsOccupied ? "Dolu" : "Boş")
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-end gap-2">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> İptal
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Sil
+                </button>
+            </div>
+        </form>
+    </div>
+</div> 

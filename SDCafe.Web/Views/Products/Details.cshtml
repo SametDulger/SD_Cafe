@@ -1,0 +1,63 @@
+@model SDCafe.Entities.Product
+
+@{
+    ViewData["Title"] = "Ürün Detayları";
+}
+
+<h1>Ürün Detayları</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Ürün Adı</dt>
+                    <dd class="col-sm-9">@Model.Name</dd>
+                    
+                    <dt class="col-sm-3">Açıklama</dt>
+                    <dd class="col-sm-9">@Model.Description</dd>
+                    
+                    <dt class="col-sm-3">Fiyat</dt>
+                    <dd class="col-sm-9">@Model.Price.ToString("C")</dd>
+                    
+                    <dt class="col-sm-3">Kategori</dt>
+                    <dd class="col-sm-9">@Model.Category?.Name</dd>
+                    
+                    <dt class="col-sm-3">Durum</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                            @(Model.IsActive ? "Aktif" : "Pasif")
+                        </span>
+                    </dd>
+                    
+                    <dt class="col-sm-3">Oluşturulma Tarihi</dt>
+                    <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                    
+                    @if (Model.UpdatedDate.HasValue)
+                    {
+                        <dt class="col-sm-3">Son Güncelleme</dt>
+                        <dd class="col-sm-9">@Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                    }
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

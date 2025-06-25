@@ -1,0 +1,138 @@
+@model IEnumerable<SDCafe.Entities.Payment>
+
+@{
+    ViewData["Title"] = "Ödemeler";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Ödemeler</h1>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Ödeme Geçmişi</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>Sipariş No</th>
+                                    <th>Masa</th>
+                                    <th>Tutar</th>
+                                    <th>Ödeme Yöntemi</th>
+                                    <th>Kasiyer</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var payment in Model.OrderByDescending(p => p.CreatedDate))
+                                {
+                                    <tr>
+                                        <td>@payment.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                        <td>@payment.Order?.OrderNumber</td>
+                                        <td>@payment.Order?.Table?.TableNumber</td>
+                                        <td>@payment.Amount.ToString("C")</td>
+                                        <td>@GetPaymentMethodText(payment.PaymentMethod)</td>
+                                        <td>@(payment.Cashier?.FirstName + " " + payment.Cashier?.LastName)</td>
+                                        <td>
+                                            <a asp-action="Receipt" asp-route-id="@payment.Id" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-print"></i> Makbuz
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center">Henüz ödeme yapılmamış.</p>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Ödemesi Alınan Siparişler</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.PaidOrders != null && ((List<SDCafe.Entities.Order>)ViewBag.PaidOrders).Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sipariş No</th>
+                                    <th>Masa</th>
+                                    <th>Garson</th>
+                                    <th>Tutar</th>
+                                    <th>Durum</th>
+                                    <th>Ödeme Tarihi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in ((List<SDCafe.Entities.Order>)ViewBag.PaidOrders).OrderByDescending(o => o.Payments.FirstOrDefault()?.CreatedDate))
+                                {
+                                    var payment = order.Payments.FirstOrDefault();
+                                    <tr>
+                                        <td>@order.OrderNumber</td>
+                                        <td>@order.Table?.TableNumber</td>
+                                        <td>@(order.Waiter?.FirstName + " " + order.Waiter?.LastName)</td>
+                                        <td>@order.TotalAmount.ToString("C")</td>
+                                        <td>
+                                            <span class="badge bg-success">Ödendi</span>
+                                        </td>
+                                        <td>@(payment?.CreatedDate.ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center">Ödemesi alınan sipariş bulunmuyor.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private string GetPaymentMethodText(SDCafe.Entities.PaymentMethod method)
+    {
+        return method switch
+        {
+            SDCafe.Entities.PaymentMethod.Cash => "Nakit",
+            SDCafe.Entities.PaymentMethod.CreditCard => "Kredi Kartı",
+            SDCafe.Entities.PaymentMethod.DebitCard => "Banka Kartı",
+            SDCafe.Entities.PaymentMethod.MobilePayment => "Mobil Ödeme",
+            _ => method.ToString()
+        };
+    }
+} 

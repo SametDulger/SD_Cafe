@@ -1,0 +1,90 @@
+@model SDCafe.Entities.User
+
+@{
+    ViewData["Title"] = "Kullanıcı Detayları";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Kullanıcı Detayları</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Geri Dön
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Model.FirstName @Model.LastName</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Ad:</strong> @Model.FirstName</p>
+                        <p><strong>Soyad:</strong> @Model.LastName</p>
+                        <p><strong>E-posta:</strong> @Model.Email</p>
+                        <p><strong>Rol:</strong> <span class="badge bg-primary">@Model.Role</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <p><strong>Telefon:</strong> @Model.PhoneNumber</p>
+                        }
+                        <p><strong>Durum:</strong> 
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Pasif</span>
+                            }
+                        </p>
+                        <p><strong>Oluşturulma:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+                        @if (Model.UpdatedDate.HasValue)
+                        {
+                            <p><strong>Güncellenme:</strong> @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning">
+                        <i class="fas fa-edit"></i> Düzenle
+                    </a>
+                    <a asp-action="ResetPassword" asp-route-id="@Model.Id" class="btn btn-outline-info">
+                        <i class="fas fa-key"></i> Parola Değiştir
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                        <i class="fas fa-trash"></i> Sil
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Rol Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><strong>Admin:</strong> Tam yetki</li>
+                    <li><strong>Manager:</strong> Yönetici yetkisi</li>
+                    <li><strong>Waiter:</strong> Garson</li>
+                    <li><strong>Cashier:</strong> Kasiyer</li>
+                    <li><strong>Kitchen:</strong> Mutfak</li>
+                    <li><strong>Accounting:</strong> Muhasebe</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,114 @@
+﻿@model SDCafe.Web.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="text-center">
+    <h1 class="display-4">SD Cafe Yönetim Paneli</h1>
+    <p class="lead">Restoran otomasyon sistemine hoş geldiniz.</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Toplam Ürün</h5>
+                        <h2 class="card-text">@Model.TotalProducts</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-box fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Aktif Sipariş</h5>
+                        <h2 class="card-text">@Model.ActiveOrders</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-clipboard-list fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Boş Masa</h5>
+                        <h2 class="card-text">@Model.AvailableTables</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-chair fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Hızlı İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <a asp-controller="Orders" asp-action="Create" class="btn btn-primary btn-lg w-100 mb-2">
+                            <i class="fas fa-plus"></i> Yeni Sipariş
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a asp-controller="Products" asp-action="Create" class="btn btn-success btn-lg w-100 mb-2">
+                            <i class="fas fa-plus"></i> Yeni Ürün
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <a asp-controller="Orders" asp-action="Active" class="btn btn-info btn-lg w-100 mb-2">
+                            <i class="fas fa-clock"></i> Aktif Siparişler
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a asp-controller="Tables" asp-action="Status" class="btn btn-warning btn-lg w-100 mb-2">
+                            <i class="fas fa-table"></i> Masa Durumu
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Sistem Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>SD Cafe Otomasyon Sistemi</strong></p>
+                <p>Bu sistem, restoran yönetimi için geliştirilmiş kapsamlı bir otomasyon çözümüdür.</p>
+                <ul>
+                    <li>Ürün yönetimi</li>
+                    <li>Sipariş takibi</li>
+                    <li>Masa yönetimi</li>
+                    <li>Raporlama</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

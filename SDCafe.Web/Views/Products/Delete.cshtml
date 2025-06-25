@@ -1,0 +1,61 @@
+@model SDCafe.Entities.Product
+
+@{
+    ViewData["Title"] = "Ürün Sil";
+}
+
+<h1>Ürün Sil</h1>
+
+<div class="alert alert-danger">
+    <h4>Bu ürünü silmek istediğinizden emin misiniz?</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Ürün Adı</dt>
+                    <dd class="col-sm-9">@Model.Name</dd>
+                    
+                    <dt class="col-sm-3">Açıklama</dt>
+                    <dd class="col-sm-9">@Model.Description</dd>
+                    
+                    <dt class="col-sm-3">Fiyat</dt>
+                    <dd class="col-sm-9">@Model.Price.ToString("C")</dd>
+                    
+                    <dt class="col-sm-3">Kategori</dt>
+                    <dd class="col-sm-9">@Model.Category?.Name</dd>
+                    
+                    <dt class="col-sm-3">Durum</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                            @(Model.IsActive ? "Aktif" : "Pasif")
+                        </span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Sil
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Geri Dön
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

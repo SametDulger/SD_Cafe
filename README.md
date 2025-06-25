@@ -201,35 +201,35 @@ dotnet run --project SDCafe.API
 ## 🌐 API Endpoints
 
 ### 📋 Siparişler
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/orders` | Tüm siparişleri listele |
-| `GET` | `/api/orders/{id}` | Sipariş detaylarını getir |
-| `POST` | `/api/orders` | Yeni sipariş oluştur |
-| `PUT` | `/api/orders/{id}` | Sipariş güncelle |
-| `DELETE` | `/api/orders/{id}` | Sipariş sil |
+-| Method | Endpoint | Açıklama |
+-| `GET` | `/api/orders` | Tüm siparişleri listele |
+-| `GET` | `/api/orders/{id}` | Sipariş detaylarını getir |
+-| `POST` | `/api/orders` | Yeni sipariş oluştur |
+-| `PUT` | `/api/orders/{id}` | Sipariş güncelle |
+-| `DELETE` | `/api/orders/{id}` | Sipariş sil |
 
 ### 📦 Ürünler
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/products` | Tüm ürünleri listele |
-| `GET` | `/api/products/{id}` | Ürün detaylarını getir |
-| `GET` | `/api/products/categories` | Kategorileri listele |
-| `POST` | `/api/products` | Yeni ürün oluştur |
-| `PUT` | `/api/products/{id}` | Ürün güncelle |
-| `DELETE` | `/api/products/{id}` | Ürün sil |
+-| Method | Endpoint | Açıklama |
+-| `GET` | `/api/products` | Tüm ürünleri listele |
+-| `GET` | `/api/products/{id}` | Ürün detaylarını getir |
+-| `GET` | `/api/products/categories` | Kategorileri listele |
+-| `POST` | `/api/products` | Yeni ürün oluştur |
+-| `PUT` | `/api/products/{id}` | Ürün güncelle |
+-| `DELETE` | `/api/products/{id}` | Ürün sil |
 
 ### 💳 Ödemeler
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/payments` | Tüm ödemeleri listele |
-| `GET` | `/api/payments/{id}` | Ödeme detaylarını getir |
-| `POST` | `/api/payments` | Yeni ödeme oluştur |
+-| Method | Endpoint | Açıklama |
+-| `GET` | `/api/payments` | Tüm ödemeleri listele |
+-| `GET` | `/api/payments/{id}` | Ödeme detaylarını getir |
+-| `POST` | `/api/payments` | Yeni ödeme oluştur |
 
 ### 👥 Kullanıcılar
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/users` | Tüm kullanıcıları listele |
-| `GET` | `/api/users/{id}` | Kullanıcı detaylarını getir |
-| `POST` | `/api/users` | Yeni kullanıcı oluştur |
-| `PUT` | `/api/users/{id}` | Kullanıcı güncelle |
-| `DELETE` | `/api/users/{id}` | Kullanıcı sil |
+-| Method | Endpoint | Açıklama |
+-| `GET` | `/api/users` | Tüm kullanıcıları listele |
+-| `GET` | `/api/users/{id}` | Kullanıcı detaylarını getir |
+-| `POST` | `/api/users` | Yeni kullanıcı oluştur |
+-| `PUT` | `/api/users/{id}` | Kullanıcı güncelle |
+-| `DELETE` | `/api/users/{id}` | Kullanıcı sil |
 
 
 

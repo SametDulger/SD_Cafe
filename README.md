@@ -165,7 +165,7 @@ graph LR
 
 #### 1. Projeyi Klonlayın
 ```bash
-git clone https://github.com/your-repo/SD_Cafe.git
+git clone https://github.com/SametDulger/SD_Cafe.git
 cd SD_Cafe
 ```
 
@@ -197,18 +197,6 @@ dotnet run --project SDCafe.API
 - **Web Uygulaması**: https://localhost:7001
 - **API**: https://localhost:7002
 - **Swagger**: https://localhost:7002/swagger
-
-## 🔐 Varsayılan Kullanıcılar
-
-Sistem ilk çalıştırıldığında aşağıdaki test kullanıcıları otomatik oluşturulur:
-
-| 👤 Kullanıcı | 📧 E-posta | 🔑 Şifre | 🎭 Rol | 
-| **Admin** | admin@sdcafe.com | admin123 | Admin | 
-| **Manager** | manager@sdcafe.com | admin123 | Manager | 
-| **Waiter** | waiter@sdcafe.com | admin123 | Waiter | 
-| **Kitchen** | kitchen@sdcafe.com | admin123 | Kitchen | 
-| **Cashier** | cashier@sdcafe.com | admin123 | Cashier | 
-| **Accounting** | accounting@sdcafe.com | admin123 | Accounting | 
 
 ## 🌐 API Endpoints
 

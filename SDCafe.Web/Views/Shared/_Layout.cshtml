@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SD Cafe</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SDCafe.Web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-coffee me-2"></i>SD Cafe
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-home me-1"></i>Ana Sayfa
+                                </a>
+                            </li>
+                        }
+                        
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Products" asp-action="Index">
+                                    <i class="fas fa-box me-1"></i>Ürünler
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Categories" asp-action="Index">
+                                    <i class="fas fa-tags me-1"></i>Kategoriler
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Tables" asp-action="Index">
+                                    <i class="fas fa-chair me-1"></i>Masalar
+                                </a>
+                            </li>
+                        }
+                        
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Waiter"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Orders" asp-action="Index">
+                                    <i class="fas fa-receipt me-1"></i>Siparişler
+                                </a>
+                            </li>
+                        }
+                        
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Kitchen"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Kitchen" asp-action="Index">
+                                    <i class="fas fa-utensils me-1"></i>Mutfak
+                                </a>
+                            </li>
+                        }
+                        
+                        @if (User.IsInRole("Cashier"))
+                        {
+                            <!-- Kasiyer için menü yok, sadece Orders sayfasına yönlendiriliyor -->
+                        }
+                        
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Accounting"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Accounting" asp-action="Index">
+                                    <i class="fas fa-calculator me-1"></i>Muhasebe
+                                </a>
+                            </li>
+                        }
+                        
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Users" asp-action="Index">
+                                    <i class="fas fa-users me-1"></i>Kullanıcılar
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i>@User.Identity?.Name
+                                <span class="badge bg-secondary ms-1">@User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#" onclick="showUserInfo()">
+                                    <i class="fas fa-info-circle me-2"></i>Kullanıcı Bilgileri
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form asp-controller="Auth" asp-action="Logout" method="post" style="display: inline;">
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+                @RenderBody()
+            }
+            else
+            {
+                @RenderBody()
+            }
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - SD Cafe - <a asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function showUserInfo() {
+            const userInfo = {
+                'Ad Soyad': '@User.Identity?.Name',
+                'E-posta': '@User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value',
+                'Rol': '@User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value'
+            };
+            
+            let infoText = 'Kullanıcı Bilgileri:\n\n';
+            for (const [key, value] of Object.entries(userInfo)) {
+                infoText += `${key}: ${value}\n`;
+            }
+            
+            alert(infoText);
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

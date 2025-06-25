@@ -1,0 +1,68 @@
+@model SDCafe.Entities.Category
+
+@{
+    ViewData["Title"] = "Kategori Detayı";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Kategori Detayı</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Düzenle
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Geri Dön
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Model.Name</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Kategori Adı:</strong> @Model.Name</p>
+                        <p><strong>Açıklama:</strong> @(string.IsNullOrEmpty(Model.Description) ? "Açıklama yok" : Model.Description)</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Oluşturulma Tarihi:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+                        @if (Model.UpdatedDate.HasValue)
+                        {
+                            <p><strong>Son Güncelleme:</strong> @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</p>
+                        }
+                        <p><strong>Durum:</strong> 
+                            <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                                @(Model.IsActive ? "Aktif" : "Pasif")
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@Model.Id" class="btn btn-outline-primary">
+                        <i class="fas fa-box"></i> Bu Kategorideki Ürünler
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning">
+                        <i class="fas fa-edit"></i> Düzenle
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                        <i class="fas fa-trash"></i> Sil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,168 @@
+@model SDCafe.Web.Models.OrderCreateViewModel
+
+@{
+    ViewData["Title"] = "Yeni Sipariş";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Yeni Sipariş</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Geri Dön
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create" method="post" id="orderForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="TableId" class="form-label">Masa</label>
+                                <select asp-for="TableId" asp-items="Model.Tables" class="form-select">
+                                    <option value="">Masa Seçin</option>
+                                </select>
+                                <span asp-validation-for="TableId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        @if (!User.IsInRole("Waiter"))
+                        {
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="WaiterId" class="form-label">Garson</label>
+                                    <select asp-for="WaiterId" asp-items="Model.Waiters" class="form-select">
+                                        <option value="">Garson Seçin</option>
+                                    </select>
+                                    <span asp-validation-for="WaiterId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Garson</label>
+                                    <input type="text" class="form-control" value="@Model.Waiters.FirstOrDefault()?.Text" readonly>
+                                    <input type="hidden" asp-for="WaiterId" value="@Model.Waiters.FirstOrDefault()?.Value" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Notes" class="form-label">Notlar</label>
+                        <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Sipariş notları..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ürünler</label>
+                        <div id="productList">
+                            <div class="row mb-2 product-item">
+                                <div class="col-md-4">
+                                    <select name="ProductIds" class="form-select product-select">
+                                        <option value="">Ürün Seçin</option>
+                                        @foreach (var product in Model.Products)
+                                        {
+                                            <option value="@product.Value" data-price="@product.Price">@product.Text - @product.Price.ToString("C")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="number" name="Quantities" class="form-control quantity-input" min="1" value="1" placeholder="Adet">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control item-total" readonly placeholder="Toplam">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-danger btn-sm remove-product">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="addProduct">
+                            <i class="fas fa-plus"></i> Ürün Ekle
+                        </button>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <strong>Toplam Tutar: <span id="totalAmount">0,00 ₺</span></strong>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Siparişi Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Bilgi</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Sipariş Alma Kuralları:</strong></p>
+                <ul>
+                    <li>Masa seçimi zorunludur</li>
+                    @if (!User.IsInRole("Waiter"))
+                    {
+                        <li>Garson seçimi zorunludur</li>
+                    }
+                    <li>En az bir ürün seçilmelidir</li>
+                    <li>Ürün miktarı 1'den az olamaz</li>
+                    <li>Notlar opsiyoneldir</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            function updateTotal() {
+                let total = 0;
+                $('.product-item').each(function() {
+                    const select = $(this).find('.product-select');
+                    const quantity = $(this).find('.quantity-input');
+                    const itemTotal = $(this).find('.item-total');
+                    
+                    if (select.val()) {
+                        const price = parseFloat(select.find('option:selected').data('price'));
+                        const qty = parseInt(quantity.val()) || 0;
+                        const totalItem = price * qty;
+                        itemTotal.val(totalItem.toFixed(2) + ' ₺');
+                        total += totalItem;
+                    }
+                });
+                $('#totalAmount').text(total.toFixed(2) + ' ₺');
+            }
+
+            $(document).on('change', '.product-select, .quantity-input', updateTotal);
+
+            $('#addProduct').click(function() {
+                const productItem = $('.product-item').first().clone();
+                productItem.find('select, input').val('');
+                productItem.find('.item-total').val('');
+                $('#productList').append(productItem);
+            });
+
+            $(document).on('click', '.remove-product', function() {
+                if ($('.product-item').length > 1) {
+                    $(this).closest('.product-item').remove();
+                    updateTotal();
+                }
+            });
+        });
+    </script>
+} 

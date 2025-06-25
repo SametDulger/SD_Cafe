@@ -1,0 +1,63 @@
+@model SDCafe.Entities.Category
+
+@{
+    ViewData["Title"] = "Kategori Düzenle";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Kategori Düzenle</h1>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Geri Dön
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Kategori Adı</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Açıklama</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Kategori Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Oluşturulma Tarihi:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+                @if (Model.UpdatedDate.HasValue)
+                {
+                    <p><strong>Son Güncelleme:</strong> @Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</p>
+                }
+                <p><strong>Durum:</strong> @(Model.IsActive ? "Aktif" : "Pasif")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

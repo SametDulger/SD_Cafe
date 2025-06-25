@@ -1,0 +1,113 @@
+@model IEnumerable<SDCafe.Web.Models.PaymentReportViewModel>
+
+@{
+    ViewData["Title"] = "Ödeme Raporu";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Ödeme Raporu</h1>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Geri
+        </a>
+        <a asp-action="DailyReport" class="btn btn-outline-success">
+            <i class="fas fa-calendar-day"></i> Günlük Rapor
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Tüm Ödemeler</h5>
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ödeme No</th>
+                            <th>Sipariş No</th>
+                            <th>Masa</th>
+                            <th>Garson</th>
+                            <th>Tutar</th>
+                            <th>Ödeme Yöntemi</th>
+                            <th>Kasiyer</th>
+                            <th>Ödeme Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Payment.Id</td>
+                                <td>@item.Order.OrderNumber</td>
+                                <td>@item.Order.Table?.TableNumber</td>
+                                <td>@(item.Order.Waiter?.FirstName + " " + item.Order.Waiter?.LastName)</td>
+                                <td>@item.Payment.Amount.ToString("C")</td>
+                                <td>@GetPaymentMethodText(item.Payment.PaymentMethod)</td>
+                                <td>@(item.Payment.Cashier?.FirstName + " " + item.Payment.Cashier?.LastName)</td>
+                                <td>@item.Payment.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    <a asp-controller="Payments" asp-action="Receipt" asp-route-id="@item.Payment.Id" 
+                                       class="btn btn-sm btn-outline-primary" target="_blank">
+                                        <i class="fas fa-print"></i> Fiş
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Toplam Ödeme</h5>
+                                <h3 class="mb-0">@Model.Sum(p => p.Payment.Amount).ToString("C")</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Toplam İşlem</h5>
+                                <h3 class="mb-0">@Model.Count()</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Ortalama Ödeme</h5>
+                                <h3 class="mb-0">@(Model.Any() ? (Model.Sum(p => p.Payment.Amount) / Model.Count()).ToString("C") : "0 ₺")</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted text-center">Henüz ödeme bulunmuyor.</p>
+        }
+    </div>
+</div>
+
+@functions {
+    private string GetPaymentMethodText(SDCafe.Entities.PaymentMethod method)
+    {
+        return method switch
+        {
+            SDCafe.Entities.PaymentMethod.Cash => "Nakit",
+            SDCafe.Entities.PaymentMethod.CreditCard => "Kredi Kartı",
+            SDCafe.Entities.PaymentMethod.DebitCard => "Banka Kartı",
+            SDCafe.Entities.PaymentMethod.MobilePayment => "Mobil Ödeme",
+            _ => method.ToString()
+        };
+    }
+} 

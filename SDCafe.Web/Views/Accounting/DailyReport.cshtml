@@ -1,0 +1,113 @@
+@model IEnumerable<SDCafe.Entities.Order>
+
+@{
+    ViewData["Title"] = "Günlük Rapor";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Günlük Rapor - @ViewBag.TargetDate.ToString("dd.MM.yyyy")</h1>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Geri
+        </a>
+        <a asp-action="PaymentReport" class="btn btn-outline-primary">
+            <i class="fas fa-file-invoice"></i> Ödeme Raporu
+        </a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Günlük Gelir</h5>
+                <h3 class="mb-0">@ViewBag.DailyRevenue.ToString("C")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Ödeme Sayısı</h5>
+                <h3 class="mb-0">@ViewBag.DailyPaymentCount</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Sipariş Sayısı</h5>
+                <h3 class="mb-0">@ViewBag.DailyOrderCount</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Ortalama Sipariş</h5>
+                <h3 class="mb-0">@(ViewBag.DailyOrderCount > 0 ? (ViewBag.DailyRevenue / ViewBag.DailyOrderCount).ToString("C") : "0 ₺")</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>@ViewBag.TargetDate.ToString("dd.MM.yyyy") Tarihli Ödenen Siparişler</h5>
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sipariş No</th>
+                            <th>Masa</th>
+                            <th>Garson</th>
+                            <th>Tutar</th>
+                            <th>Ödeme Tarihi</th>
+                            <th>Ödeme Yöntemi</th>
+                            <th>Kasiyer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.OrderByDescending(o => o.Payments.FirstOrDefault()?.CreatedDate))
+                        {
+                            var payment = order.Payments.FirstOrDefault();
+                            <tr>
+                                <td>@order.OrderNumber</td>
+                                <td>@order.Table?.TableNumber</td>
+                                <td>@(order.Waiter?.FirstName + " " + order.Waiter?.LastName)</td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>@(payment?.CreatedDate.ToString("HH:mm") ?? "-")</td>
+                                <td>@GetPaymentMethodText(payment?.PaymentMethod)</td>
+                                <td>@(payment?.Cashier?.FirstName + " " + payment?.Cashier?.LastName)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted text-center">Bu tarihte ödenen sipariş bulunmuyor.</p>
+        }
+    </div>
+</div>
+
+@functions {
+    private string GetPaymentMethodText(SDCafe.Entities.PaymentMethod? method)
+    {
+        if (!method.HasValue) return "-";
+        
+        return method.Value switch
+        {
+            SDCafe.Entities.PaymentMethod.Cash => "Nakit",
+            SDCafe.Entities.PaymentMethod.CreditCard => "Kredi Kartı",
+            SDCafe.Entities.PaymentMethod.DebitCard => "Banka Kartı",
+            SDCafe.Entities.PaymentMethod.MobilePayment => "Mobil Ödeme",
+            _ => method.Value.ToString()
+        };
+    }
+} 

@@ -1,0 +1,68 @@
+# .NET ve Visual Studio için genel .gitignore
+
+# Build çıktıları
+bin/
+obj/
+
+# User-specific dosyalar
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Veritabanı dosyaları
+*.db
+*.mdf
+*.ldf
+
+# Migration ve cache dosyaları
+Migrations/
+*.cache
+*.pdb
+*.log
+*.vspscc
+*.vssscc
+
+# Publish çıktıları
+publish/
+
+# Test sonuçları
+TestResults/
+
+# Paketler
+*.nupkg
+packages/
+
+# Diğer
+*.bak
+*.tmp
+*.swp
+
+# Dotnet tool restore
+.dotnet_toolstarget
+
+# EF Core tools
+*.efj
+
+# Local ayar dosyaları
+appsettings.Development.json
+secrets.json
+
+# wwwroot publish çıktısı
+SDCafe.Web/wwwroot/
+
+# Son 

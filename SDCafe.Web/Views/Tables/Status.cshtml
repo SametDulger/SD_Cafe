@@ -1,0 +1,125 @@
+@model IEnumerable<SDCafe.Web.Models.TableStatusViewModel>
+
+@{
+    ViewData["Title"] = "Masa Durumları";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Masa Durumları</h1>
+    <div>
+        <span class="badge bg-success me-2">Boş: @Model.Count(t => !t.IsOccupied)</span>
+        <span class="badge bg-warning me-2">Dolu: @Model.Count(t => t.IsOccupied)</span>
+        <span class="badge bg-primary">Toplam: @Model.Count()</span>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var tableStatus in Model.OrderBy(t => t.Table.TableNumber))
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 @(tableStatus.IsOccupied ? "border-warning" : "border-success")">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Masa @tableStatus.Table.TableNumber</h6>
+                    <span class="badge @(tableStatus.IsOccupied ? "bg-warning" : "bg-success")">
+                        @(tableStatus.IsOccupied ? "Dolu" : "Boş")
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <small class="text-muted">Kapasite:</small><br>
+                            <strong>@tableStatus.Table.Capacity kişilik</strong>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Durum:</small><br>
+                            <strong>@(tableStatus.IsOccupied ? "Dolu" : "Boş")</strong>
+                        </div>
+                    </div>
+                    
+                    @if (tableStatus.IsOccupied && tableStatus.ActiveOrder != null)
+                    {
+                        <hr>
+                        <div class="mb-2">
+                            <small class="text-muted">Aktif Sipariş:</small><br>
+                            <strong>@tableStatus.ActiveOrder.OrderNumber</strong>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <small class="text-muted">Garson:</small><br>
+                                <strong>@(tableStatus.ActiveOrder.Waiter?.FirstName + " " + tableStatus.ActiveOrder.Waiter?.LastName)</strong>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Durum:</small><br>
+                                <span class="badge @GetOrderStatusBadgeClass(tableStatus.ActiveOrder.Status)">
+                                    @GetOrderStatusText(tableStatus.ActiveOrder.Status)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">Toplam Tutar:</small><br>
+                            <strong class="text-primary">@tableStatus.ActiveOrder.TotalAmount.ToString("C")</strong>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">Sipariş Zamanı:</small><br>
+                            <strong>@tableStatus.ActiveOrder.CreatedDate.ToString("HH:mm")</strong>
+                        </div>
+                        
+                        @if (tableStatus.ActiveOrder.Status == SDCafe.Entities.OrderStatus.Completed)
+                        {
+                            <div class="alert alert-success py-2">
+                                <small><strong>Ödeme Bekleniyor</strong></small>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group w-100" role="group">
+                        <a asp-action="Details" asp-route-id="@tableStatus.Table.Id" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> Detay
+                        </a>
+                        @if (tableStatus.IsOccupied && tableStatus.ActiveOrder != null)
+                        {
+                            <a asp-action="Details" asp-controller="Orders" asp-route-id="@tableStatus.ActiveOrder.Id" class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-receipt"></i> Sipariş
+                            </a>
+                            @if (tableStatus.ActiveOrder.Status == SDCafe.Entities.OrderStatus.Completed && User.IsInRole("Cashier") && (tableStatus.ActiveOrder.Payments == null || !tableStatus.ActiveOrder.Payments.Any()))
+                            {
+                                <a asp-action="Create" asp-controller="Payments" asp-route-orderId="@tableStatus.ActiveOrder.Id" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-credit-card"></i> Ödeme Al
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@functions {
+    private string GetOrderStatusBadgeClass(SDCafe.Entities.OrderStatus status)
+    {
+        return status switch
+        {
+            SDCafe.Entities.OrderStatus.Pending => "bg-warning text-dark",
+            SDCafe.Entities.OrderStatus.Preparing => "bg-info",
+            SDCafe.Entities.OrderStatus.Ready => "bg-primary",
+            SDCafe.Entities.OrderStatus.Completed => "bg-success",
+            SDCafe.Entities.OrderStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetOrderStatusText(SDCafe.Entities.OrderStatus status)
+    {
+        return status switch
+        {
+            SDCafe.Entities.OrderStatus.Pending => "Bekliyor",
+            SDCafe.Entities.OrderStatus.Preparing => "Hazırlanıyor",
+            SDCafe.Entities.OrderStatus.Ready => "Hazır",
+            SDCafe.Entities.OrderStatus.Completed => "Tamamlandı",
+            SDCafe.Entities.OrderStatus.Cancelled => "İptal Edildi",
+            _ => "Bilinmiyor"
+        };
+    }
+} 

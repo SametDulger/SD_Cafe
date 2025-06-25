@@ -165,7 +165,7 @@ graph LR
 
 #### 1. Projeyi Klonlayın
 ```bash
-git clone https://github.com/your-repo/SD_Cafe.git
+git clone https://github.com/SametDulger/SD_Cafe.git
 cd SD_Cafe
 ```
 
@@ -198,21 +198,9 @@ dotnet run --project SDCafe.API
 - **API**: https://localhost:7002
 - **Swagger**: https://localhost:7002/swagger
 
-## 🔐 Varsayılan Kullanıcılar
-
-Sistem ilk çalıştırıldığında aşağıdaki test kullanıcıları otomatik oluşturulur:
-
-| 👤 Kullanıcı | 📧 E-posta | 🔑 Şifre | 🎭 Rol | 
-| **Admin** | admin@sdcafe.com | admin123 | Admin | 
-| **Manager** | manager@sdcafe.com | admin123 | Manager | 
-| **Waiter** | waiter@sdcafe.com | admin123 | Waiter | 
-| **Kitchen** | kitchen@sdcafe.com | admin123 | Kitchen | 
-| **Cashier** | cashier@sdcafe.com | admin123 | Cashier | 
-| **Accounting** | accounting@sdcafe.com | admin123 | Accounting | 
-
 ## 🌐 API Endpoints
-
-### 📋 Siparişler
+```bash
+📋 Siparişler
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/orders` | Tüm siparişleri listele |
 | `GET` | `/api/orders/{id}` | Sipariş detaylarını getir |
@@ -220,7 +208,7 @@ Sistem ilk çalıştırıldığında aşağıdaki test kullanıcıları otomatik
 | `PUT` | `/api/orders/{id}` | Sipariş güncelle |
 | `DELETE` | `/api/orders/{id}` | Sipariş sil |
 
-### 📦 Ürünler
+📦 Ürünler
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/products` | Tüm ürünleri listele |
 | `GET` | `/api/products/{id}` | Ürün detaylarını getir |
@@ -229,20 +217,20 @@ Sistem ilk çalıştırıldığında aşağıdaki test kullanıcıları otomatik
 | `PUT` | `/api/products/{id}` | Ürün güncelle |
 | `DELETE` | `/api/products/{id}` | Ürün sil |
 
-### 💳 Ödemeler
+💳 Ödemeler
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/payments` | Tüm ödemeleri listele |
 | `GET` | `/api/payments/{id}` | Ödeme detaylarını getir |
 | `POST` | `/api/payments` | Yeni ödeme oluştur |
 
-### 👥 Kullanıcılar
+👥 Kullanıcılar
 | Method | Endpoint | Açıklama |
 | `GET` | `/api/users` | Tüm kullanıcıları listele |
 | `GET` | `/api/users/{id}` | Kullanıcı detaylarını getir |
 | `POST` | `/api/users` | Yeni kullanıcı oluştur |
 | `PUT` | `/api/users/{id}` | Kullanıcı güncelle |
 | `DELETE` | `/api/users/{id}` | Kullanıcı sil |
-
+```
 
 
 ## 🐛 Sorun Giderme

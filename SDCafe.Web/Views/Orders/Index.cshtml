@@ -14,15 +14,7 @@
     }
 </div>
 
-@if (ViewBag.TotalOrders != null)
-{
-    <div class="alert alert-info">
-        <strong>Debug Bilgisi:</strong> 
-        Toplam: @ViewBag.TotalOrders | 
-        Tamamlanan: @ViewBag.CompletedOrders | 
-        Bekleyen: @ViewBag.PendingOrders
-    </div>
-}
+
 
 <div class="row">
     @foreach (var order in Model)

@@ -1,6 +1,5 @@
 using SDCafe.Entities;
-using System.Security.Cryptography;
-using System.Text;
+using BCrypt.Net;
 
 namespace SDCafe.DataAccess
 {
@@ -69,11 +68,7 @@ namespace SDCafe.DataAccess
 
         private static string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
+            return BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));
         }
     }
 } 

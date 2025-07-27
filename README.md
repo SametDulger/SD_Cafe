@@ -1,287 +1,168 @@
 # SD Cafe - Restaurant Management System
 
-![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=.net&logoColor=white)
-![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-9.0-512BD4?style=for-the-badge&logo=asp.net&logoColor=white)
-![Entity Framework](https://img.shields.io/badge/Entity%20Framework-9.0-512BD4?style=for-the-badge&logo=entity-framework&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+Modern bir restoran yönetim sistemi. .NET 9.0, Entity Framework Core ve ASP.NET Core MVC kullanılarak geliştirilmiştir.
 
-**Modern restoran işletmeleri için geliştirilmiş kapsamlı otomasyon sistemi**
+## 🚀 Özellikler
 
----
+### 🔐 Güvenlik
+- **BCrypt** ile güvenli şifre hash'leme
+- **JWT Token** tabanlı API authentication
+- **Role-based authorization** (Admin, Manager, Waiter, Cashier, Kitchen, Accounting)
+- **CORS** politikası ile güvenli API erişimi
 
-## 📋 Proje Hakkında
+### 📊 Yönetim Modülleri
+- **Kullanıcı Yönetimi**: Personel kayıt ve yetkilendirme
+- **Ürün Yönetimi**: Menü ürünleri ve kategorileri
+- **Masa Yönetimi**: Masa durumu ve kapasite takibi
+- **Sipariş Yönetimi**: Sipariş alma, takip ve durum güncelleme
+- **Ödeme Yönetimi**: Ödeme alma ve raporlama
+- **Muhasebe**: Günlük raporlar ve finansal takip
 
-SD Cafe, restoran işletmelerinin tüm operasyonel süreçlerini dijitalleştiren modern bir yönetim sistemidir. Sipariş yönetiminden ödeme işlemlerine, mutfak operasyonlarından raporlamaya kadar restoran işletmeciliğinin her alanını kapsar.
+### 🛠️ Teknik Özellikler
+- **Clean Architecture** (Entities, DataAccess, Business, Web, API)
+- **Entity Framework Core** ile SQLite veritabanı
+- **FluentValidation** ile input validation
+- **Serilog** ile structured logging
+- **Global Exception Handling** middleware
+- **Unit Tests** (xUnit, Moq, FluentAssertions)
+- **Swagger** API documentation
 
-### 🎯 Ana Hedefler
-- **Operasyonel Verimlilik**: Sipariş süreçlerini hızlandırma
-- **Müşteri Memnuniyeti**: Hızlı ve doğru servis
-- **Finansal Kontrol**: Gelir takibi ve raporlama
-- **Personel Yönetimi**: Role-based yetkilendirme sistemi
-
-## 🏗️ Proje Mimarisi
-
-Proje, **N-Tier (Katmanlı) Mimari** yaklaşımı kullanılarak geliştirilmiştir:
+## 🏗️ Proje Yapısı
 
 ```
 SD_Cafe/
-├── 📁 SDCafe.Web/          # 🌐 MVC Web Uygulaması (Ana Panel)
-├── 📁 SDCafe.API/          # 🔌 REST API Katmanı
-├── 📁 SDCafe.Business/     # ⚙️ İş Mantığı Katmanı
-├── 📁 SDCafe.DataAccess/   # 🗄️ Veri Erişim Katmanı
-└── 📁 SDCafe.Entities/     # 📊 Veri Modelleri
+├── SDCafe.Entities/          # Domain entities
+├── SDCafe.DataAccess/        # Data access layer
+├── SDCafe.Business/          # Business logic layer
+├── SDCafe.Web/              # ASP.NET Core MVC Web App
+├── SDCafe.API/              # REST API
+└── SDCafe.Tests/            # Unit tests
 ```
-
-### Katman Detayları
-
-| Katman | Açıklama | Teknolojiler |
-|--------|----------|--------------|
-| **SDCafe.Web** | MVC web uygulaması (Ana yönetim paneli) | ASP.NET Core MVC, Bootstrap 5, Font Awesome |
-| **SDCafe.API** | REST API endpoint'leri | ASP.NET Core Web API, JSON |
-| **SDCafe.Business** | İş kuralları ve servisler | C# Services, Interfaces |
-| **SDCafe.DataAccess** | Veri erişimi | Entity Framework Core, SQLite |
-| **SDCafe.Entities** | Domain modelleri | C# Classes, Data Annotations |
-
-## 🛠️ Teknoloji Stack'i
-
-### Backend
-- **.NET 9.0** - Ana framework
-- **ASP.NET Core MVC** - Web uygulaması
-- **ASP.NET Core Web API** - REST API
-- **Entity Framework Core** - ORM
-- **SQLite** - Veritabanı
-
-### Frontend
-- **Bootstrap 5.3** - CSS framework
-- **Font Awesome 6.0** - Icon kütüphanesi
-- **jQuery** - JavaScript kütüphanesi
-- **Razor Views** - Template engine
-
-### Güvenlik
-- **Cookie Authentication** - Kimlik doğrulama
-- **Role-based Authorization** - Yetkilendirme
-- **Password Hashing** - Şifre güvenliği
-
-## 👥 Kullanıcı Rolleri
-
-### 🔑 Admin (Yönetici)
-**Tam sistem yetkilerine sahip**
-- ✅ Kullanıcı yönetimi 
-- ✅ Sistem konfigürasyonu
-- ✅ Tüm raporlara erişim
-- ✅ Ürün, kategori, masa yönetimi
-- ✅ Tüm modüllere erişim
-
-### 👔 Manager (İşletmeci)
-**Operasyonel yönetim yetkileri**
-- ✅ Ürün ve kategori yönetimi
-- ✅ Sipariş yönetimi
-- ✅ Raporlar ve analizler
-- ✅ Masa yönetimi
-
-### 🍽️ Waiter (Garson)
-**Sipariş ve servis operasyonları**
-- ✅ Sipariş oluşturma
-- ✅ Sipariş takibi
-- ✅ Sipariş teslimi
-
-### 👨‍🍳 Kitchen (Mutfak)
-**Mutfak operasyonları**
-- ✅ Sipariş görüntüleme
-- ✅ Sipariş durumu güncelleme
-
-### 💰 Cashier (Kasiyer)
-**Ödeme işlemleri**
-- ✅ Ödeme alma
-- ✅ Fiş kesme
-
-### 📊 Accounting (Muhasebe)
-**Finansal raporlama**
-- ✅ Günlük satış raporları
-- ✅ Gelir analizi
-- ✅ Finansal dashboard
-
-## 🔄 Sipariş Yaşam Döngüsü
-
-```mermaid
-graph LR
-    A[📝 Sipariş Oluştur] --> B[⏳ Beklemede]
-    B --> C[👨‍🍳 Mutfak Onayı]
-    C --> D[🔥 Hazırlanıyor]
-    D --> E[✅ Hazır]
-    E --> F[🍽️ Servis]
-    F --> G[💰 Ödeme]
-    G --> H[🪑 Masa Boşaltma]
-```
-
-### 1. 📝 Sipariş Oluşturma
-**Sorumlu**: Garson (Waiter)
-- Müşteri masaya oturur
-- Garson boş masayı işgal eder
-- Menüden ürünler seçilir
-- Sipariş sisteme kaydedilir
-- **Durum**: `Pending` (Beklemede)
-
-### 2. 👨‍🍳 Mutfak Onayı
-**Sorumlu**: Mutfak Personeli (Kitchen)
-- Bekleyen siparişler mutfak panelinde görüntülenir
-- Mutfak personeli siparişi kabul eder
-- **Durum**: `Preparing` (Hazırlanıyor)
-
-### 3. 🔥 Hazırlama Süreci
-**Sorumlu**: Mutfak Personeli (Kitchen)
-- Sipariş hazırlanır
-- Hazırlama tamamlandığında durum güncellenir
-- **Durum**: `Ready` (Hazır)
-
-### 4. 🍽️ Servis
-**Sorumlu**: Garson (Waiter)
-- Hazır siparişler garson panelinde görüntülenir
-- Garson siparişi müşteriye teslim eder
-- **Durum**: `Completed` (Tamamlandı)
-
-### 5. 💰 Ödeme
-**Sorumlu**: Kasiyer (Cashier)
-- Tamamlanan siparişler için ödeme alınır
-- Ödeme yöntemi seçilir (Nakit, Kart, Mobil)
-- Fiş kesilir
-- **Durum**: Ödeme `Completed`
-
-### 6. 🪑 Masa Boşaltma
-**Otomatik**: Sistem
-- Ödeme tamamlandıktan sonra masa otomatik boşaltılır
-- Masa yeni müşteriler için hazır hale gelir
-
 
 ## 🚀 Kurulum
 
-### 📋 Gereksinimler
-- **.NET 9.0 SDK** veya üzeri
-- **Visual Studio 2022** veya **VS Code**
-- **SQLite** (otomatik kurulum)
+### Gereksinimler
+- .NET 9.0 SDK
+- Visual Studio 2022 veya VS Code
 
-### 🔧 Adım Adım Kurulum
+### Adımlar
 
-#### 1. Projeyi Klonlayın
+1. **Repository'yi klonlayın**
+   ```bash
+   git clone https://github.com/your-username/SD_Cafe.git
+   cd SD_Cafe
+   ```
+
+2. **Bağımlılıkları yükleyin**
+   ```bash
+   dotnet restore
+   ```
+
+3. **Veritabanını oluşturun**
+   ```bash
+   dotnet ef database update --project SDCafe.DataAccess --startup-project SDCafe.Web
+   ```
+
+4. **Uygulamayı çalıştırın**
+   ```bash
+   # Web uygulaması
+   dotnet run --project SDCafe.Web
+   
+   # API
+   dotnet run --project SDCafe.API
+   ```
+
+## 🔑 Varsayılan Kullanıcılar
+
+Uygulama ilk çalıştırıldığında aşağıdaki kullanıcılar otomatik olarak oluşturulur:
+
+| Rol | E-posta | Şifre |
+|-----|---------|-------|
+| Admin | admin@sdcafe.com | admin123 |
+| Manager | manager@sdcafe.com | admin123 |
+| Waiter | waiter@sdcafe.com | admin123 |
+| Cashier | cashier@sdcafe.com | admin123 |
+| Kitchen | kitchen@sdcafe.com | admin123 |
+| Accounting | accounting@sdcafe.com | admin123 |
+
+## 📋 API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - Kullanıcı girişi
+
+### Products
+- `GET /api/products` - Tüm ürünleri listele
+- `POST /api/products` - Yeni ürün ekle
+- `PUT /api/products/{id}` - Ürün güncelle
+- `DELETE /api/products/{id}` - Ürün sil
+
+### Orders
+- `GET /api/orders` - Tüm siparişleri listele
+- `POST /api/orders` - Yeni sipariş oluştur
+- `PUT /api/orders/{id}/status` - Sipariş durumu güncelle
+
+## 🧪 Testler
+
 ```bash
-git clone https://github.com/SametDulger/SD_Cafe.git
-cd SD_Cafe
+# Tüm testleri çalıştır
+dotnet test
+
+# Coverage ile test çalıştır
+dotnet test --collect:"XPlat Code Coverage"
 ```
 
-#### 2. Bağımlılıkları Yükleyin
-```bash
-dotnet restore
+## 📝 Logging
+
+Uygulama Serilog kullanarak aşağıdaki lokasyonlara log yazar:
+- **Console**: Geliştirme sırasında
+- **File**: `logs/sdcafe-YYYY-MM-DD.log`
+
+## 🔧 Konfigürasyon
+
+### appsettings.json
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=SDCafe.db"
+  },
+  "JwtSettings": {
+    "SecretKey": "your-super-secret-key",
+    "Issuer": "SDCafe",
+    "Audience": "SDCafeUsers",
+    "ExpirationHours": 8
+  }
+}
 ```
 
-#### 3. Veritabanını Oluşturun
-```bash
-# Migration oluştur
-dotnet ef migrations add InitialCreate --project SDCafe.DataAccess --startup-project SDCafe.Web
+## 🚨 Güvenlik Notları
 
-# Veritabanını güncelle
-dotnet ef database update --project SDCafe.DataAccess --startup-project SDCafe.Web
-```
-
-#### 4. Web Uygulamasını Çalıştırın
-```bash
-dotnet run --project SDCafe.Web
-```
-
-#### 5. API'yi Çalıştırın (Opsiyonel)
-```bash
-dotnet run --project SDCafe.API
-```
-
-### 🌐 Erişim Bilgileri
-- **Web Uygulaması**: https://localhost:7001
-- **API**: https://localhost:7002
-- **Swagger**: https://localhost:7002/swagger
-
-## 🌐 API Endpoints
-```bash
-📋 Siparişler
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/orders` | Tüm siparişleri listele |
-| `GET` | `/api/orders/{id}` | Sipariş detaylarını getir |
-| `POST` | `/api/orders` | Yeni sipariş oluştur |
-| `PUT` | `/api/orders/{id}` | Sipariş güncelle |
-| `DELETE` | `/api/orders/{id}` | Sipariş sil |
-
-📦 Ürünler
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/products` | Tüm ürünleri listele |
-| `GET` | `/api/products/{id}` | Ürün detaylarını getir |
-| `GET` | `/api/products/categories` | Kategorileri listele |
-| `POST` | `/api/products` | Yeni ürün oluştur |
-| `PUT` | `/api/products/{id}` | Ürün güncelle |
-| `DELETE` | `/api/products/{id}` | Ürün sil |
-
-💳 Ödemeler
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/payments` | Tüm ödemeleri listele |
-| `GET` | `/api/payments/{id}` | Ödeme detaylarını getir |
-| `POST` | `/api/payments` | Yeni ödeme oluştur |
-
-👥 Kullanıcılar
-| Method | Endpoint | Açıklama |
-| `GET` | `/api/users` | Tüm kullanıcıları listele |
-| `GET` | `/api/users/{id}` | Kullanıcı detaylarını getir |
-| `POST` | `/api/users` | Yeni kullanıcı oluştur |
-| `PUT` | `/api/users/{id}` | Kullanıcı güncelle |
-| `DELETE` | `/api/users/{id}` | Kullanıcı sil |
-```
-
-
-## 🐛 Sorun Giderme
-
-### 🗄️ Veritabanı Bağlantı Sorunu
-```bash
-# Veritabanını tamamen yeniden oluştur
-dotnet ef database drop --force --project SDCafe.DataAccess --startup-project SDCafe.Web
-dotnet ef database update --project SDCafe.DataAccess --startup-project SDCafe.Web
-```
-
-### 📦 Migration Sorunları
-```bash
-# Tüm migration'ları sil ve yeniden oluştur
-dotnet ef migrations remove --project SDCafe.DataAccess --startup-project SDCafe.Web
-dotnet ef migrations add InitialCreate --project SDCafe.DataAccess --startup-project SDCafe.Web
-dotnet ef database update --project SDCafe.DataAccess --startup-project SDCafe.Web
-```
-
-### 🔐 Authentication Sorunu
-- Browser'da çerezleri temizleyin
-- Uygulamayı yeniden başlatın
-- Cache'i temizleyin: `dotnet clean`
-
-## 📈 Performans Optimizasyonları
-
-- ✅ Async/await pattern'leri
-- ✅ Entity Framework Include optimizasyonları
-- ✅ Null safety controls
-- ✅ Clean code practices
-- ✅ Repository pattern implementation
-- ✅ Lazy loading optimizasyonları
-
-## 🧪 Test Kullanıcıları
-
-Geliştirme ve test için hazır kullanıcılar:
-
-```
-🔑 Admin Test: admin@sdcafe.com / admin123
-👔 Manager Test: manager@sdcafe.com / admin123  
-🍽️ Waiter Test: waiter@sdcafe.com / admin123
-👨‍🍳 Kitchen Test: kitchen@sdcafe.com / admin123
-💰 Cashier Test: cashier@sdcafe.com / admin123
-📊 Accounting Test: accounting@sdcafe.com / admin123
-```
+1. **Production'da** JWT secret key'i değiştirin
+2. **HTTPS** kullanın
+3. **Environment variables** ile hassas bilgileri saklayın
+4. **Regular security updates** yapın
 
 ## 🤝 Katkıda Bulunma
 
-1. 🍴 Fork yapın
-2. 🌿 Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. 💾 Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
-4. 📤 Branch'inizi push edin (`git push origin feature/amazing-feature`)
-5. 🔄 Pull Request oluşturun
+1. Fork yapın
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Commit yapın (`git commit -m 'Add amazing feature'`)
+4. Push yapın (`git push origin feature/amazing-feature`)
+5. Pull Request oluşturun
+
+## 📄 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır.
+
+## 👥 Geliştirici
+
+**Samet** - [GitHub](https://github.com/your-username)
+
+## 📞 İletişim
+
+- **E-posta**: your-email@example.com
+- **GitHub**: [@your-username](https://github.com/your-username)
+
+---
+
+⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!
 

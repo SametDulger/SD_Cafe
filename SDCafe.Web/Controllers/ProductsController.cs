@@ -59,13 +59,13 @@ namespace SDCafe.Web.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+            return View(product!);
         }
 
         public async Task<IActionResult> Create()
         {
-            var categories = await _categoryService.GetAllAsync() ?? Enumerable.Empty<Category>();
-            ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+            var categories = await _categoryService.GetAllAsync();
+            ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories ?? Enumerable.Empty<Category>(), "Id", "Name");
             return View();
         }
 
@@ -79,8 +79,8 @@ namespace SDCafe.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var categories = await _categoryService.GetAllAsync() ?? Enumerable.Empty<Category>();
-            ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+            var categories = await _categoryService.GetAllAsync();
+            ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories ?? Enumerable.Empty<Category>(), "Id", "Name");
             return View(product);
         }
 
@@ -91,9 +91,9 @@ namespace SDCafe.Web.Controllers
             {
                 return NotFound();
             }
-            var categories = await _categoryService.GetAllAsync() ?? Enumerable.Empty<Category>();
-            ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
-            return View(product);
+            var categories = await _categoryService.GetAllAsync();
+            ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories ?? Enumerable.Empty<Category>(), "Id", "Name");
+            return View(product!);
         }
 
         [HttpPost]
@@ -109,8 +109,8 @@ namespace SDCafe.Web.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    var categories = await _categoryService.GetAllAsync() ?? Enumerable.Empty<Category>();
-                    ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+                    var categories = await _categoryService.GetAllAsync();
+                    ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories ?? Enumerable.Empty<Category>(), "Id", "Name");
                     return View(product);
                 }
 
@@ -122,8 +122,8 @@ namespace SDCafe.Web.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", $"Güncelleme sırasında hata oluştu: {ex.Message}");
-                var categories = await _categoryService.GetAllAsync() ?? Enumerable.Empty<Category>();
-                ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+                var categories = await _categoryService.GetAllAsync();
+                ViewBag.CategoryId = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories ?? Enumerable.Empty<Category>(), "Id", "Name");
                 return View(product);
             }
         }

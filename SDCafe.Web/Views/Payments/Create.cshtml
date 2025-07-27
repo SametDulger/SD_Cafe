@@ -87,7 +87,6 @@
                         </div>
                     </div>
                     
-                    <!-- Hidden input for Amount -->
                     <input type="hidden" asp-for="Amount" value="@(Model.Order?.TotalAmount ?? 0)" />
 
                     <div class="alert alert-info">
@@ -139,7 +138,6 @@
     
     <script>
         $(document).ready(function() {
-            // Tutarı sipariş tutarına eşitle
             $('#Amount').val('@(Model.Order?.TotalAmount.ToString("0.00") ?? "0.00")');
         });
     </script>

@@ -1,0 +1,106 @@
+/* Bootstrap 5 Custom Styles for SDCafe */
+
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card-header {
+    background-color: var(--light-color);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.table th {
+    background-color: var(--light-color);
+    border-top: none;
+}
+
+.alert {
+    border-radius: 0.375rem;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Custom styles for SDCafe */
+.order-status-pending {
+    color: var(--warning-color);
+}
+
+.order-status-preparing {
+    color: var(--info-color);
+}
+
+.order-status-ready {
+    color: var(--success-color);
+}
+
+.order-status-completed {
+    color: var(--secondary-color);
+}
+
+.table-status-available {
+    color: var(--success-color);
+}
+
+.table-status-occupied {
+    color: var(--danger-color);
+}
+
+.table-status-reserved {
+    color: var(--warning-color);
+}
+
+/* Dashboard cards */
+.dashboard-card {
+    transition: transform 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+} 
